@@ -4,7 +4,6 @@ export const saveLetter = async (req, res) => {
     const { letter, letterTitle } = req.body;
     const googleAccessToken = req.headers['x-google-access-token'];
 
-    // Validate inputs
     if (!letter?.trim()) {
         return res.status(400).json({ message: 'Letter content is required.' });
     }
@@ -23,14 +22,13 @@ export const saveLetter = async (req, res) => {
             auth: oauth2Client,
         });
 
-        // Upload file to the user's Drive.
         const driveResponse = await drive.files.create({
             requestBody: {
                 name: letterTitle ? `${letterTitle}.txt` : 'Untitled Letter.txt',
-                mimeType: 'text/plain',
+                mimeType: 'text/html',
             },
             media: {
-                mimeType: 'text/plain',
+                mimeType: 'text/html',
                 body: letter,
             },
             fields: 'id, name',

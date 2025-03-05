@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGoogleDrive } from 'react-icons/fa';
 import { initializeApp } from 'firebase/app';
-import { 
-  getAuth, 
-  signInWithPopup, 
+import {
+  getAuth,
+  signInWithPopup,
   GoogleAuthProvider,
   onAuthStateChanged,
   signOut,
@@ -23,7 +25,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-provider.addScope('https://www.googleapis.com/auth/drive.file'); // Add Drive scope
+provider.addScope('https://www.googleapis.com/auth/drive.file');
 
 function App() {
   const [letter, setLetter] = useState('');
@@ -40,7 +42,6 @@ function App() {
       if (firebaseUser) {
         setUser(firebaseUser);
         setMessage('Successfully signed in.');
-        // Load stored Google access token
         const storedToken = localStorage.getItem('googleAccessToken');
         if (storedToken) setGoogleAccessToken(storedToken);
       } else {
@@ -67,8 +68,7 @@ function App() {
       const result = await signInWithPopup(auth, provider);
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const accessToken = credential.accessToken;
-      
-      // Store Google access token
+
       localStorage.setItem('googleAccessToken', accessToken);
       setGoogleAccessToken(accessToken);
       setMessage('Successfully signed in.');
@@ -105,21 +105,18 @@ function App() {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL || ''}/api/save-letter`,
         { letter, letterTitle },
-        { 
-          headers: { 
+        {
+          headers: {
             Authorization: `Bearer ${token}`,
-            'X-Google-Access-Token': googleAccessToken 
-          } 
+            'X-Google-Access-Token': googleAccessToken
+          }
         }
       );
-      
       setMessage(response.data.message);
       localStorage.removeItem('letterDraft');
     } catch (error) {
       console.error('Save Error:', error);
       setMessage(error.response?.data?.message || 'Failed to save letter');
-      
-      // Handle token expiration
       if (error.response?.status === 401) {
         localStorage.removeItem('googleAccessToken');
         setGoogleAccessToken('');
@@ -147,7 +144,7 @@ function App() {
   return (
     <div className="container mx-auto p-4 max-w-2xl">
       <h1 className="text-3xl font-bold mb-6 text-center">Letter Editor</h1>
-      
+
       {loadingUser ? (
         <p className="text-center text-gray-600">Loading user...</p>
       ) : user ? (
@@ -189,12 +186,14 @@ function App() {
         value={letterTitle}
         onChange={(e) => setLetterTitle(e.target.value)}
       />
-      
-      <textarea
-        className="border p-2 w-full h-64 mb-4 rounded"
-        placeholder="Write your letter here..."
+
+      {/* React Quill Editor */}
+      <ReactQuill
         value={letter}
-        onChange={(e) => setLetter(e.target.value)}
+        onChange={setLetter}
+        placeholder="Write your letter here..."
+        className="mb-15 h-50"
+        style={{ }}
       />
 
       <div className="mb-4 flex justify-between">
