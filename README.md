@@ -4,7 +4,7 @@ Letter App is a full-stack web application that lets users create, edit, and man
 
 ## Live Demo
 
-Visit our application at: [https://letter-app-rd5v.vercel.app](https://letter-app-rd5v.vercel.app)
+Visit our application at: [https://letter-app.vercel.app](https://letter-app.vercel.app)
 
 ## Project Structure
 
@@ -20,6 +20,22 @@ LetterApp/
 - **Digital Letter Editor:** Write and format your letters in a user-friendly editor.
 - **Google Drive Integration:** Save and retrieve letters as Google Docs.
 - **Simple & Clean UI:** Focus on your writing without distractions.
+
+## Technologies Used
+
+### Frontend
+- React.js
+- Tailwind CSS
+- Google Auth API
+
+### Backend
+- Node.js
+- Express.js
+- Firebase
+
+### Authentication & Storage
+- Google OAuth 2.0
+- Google Drive API
 
 ## Installation
 
